@@ -1,14 +1,15 @@
-import Fastify from 'fastify';
-import serverless from 'serverless-http';
+import fs from 'fs';
+import path from 'path';
 
-const fastify = Fastify({
-  logger: true,
-});
+export default async function handler(req, res) {
+  const postsPath = path.resolve('posts.json');
 
-fastify.get('/api/posts', async (request, reply) => {
-  const posts = require('../posts.json');
-  return { posts };
-});
+  try {
+    const posts = JSON.parse(fs.readFileSync(postsPath, 'utf-8'));
+    res.status(200).json({ posts });
+  } catch (error) {
+    console.error('Erro ao carregar os posts:', error);
+    res.status(500).json({ error: 'Falha ao carregar os posts.' });
+  }
+}
 
-
-export default serverless(fastify);
