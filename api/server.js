@@ -1,6 +1,9 @@
-const serverless = require('serverless-http');
+import Fastify from 'fastify';
+import serverless from 'serverless-http';
 
-const fastify = require('fastify')({ logger: true });
+const fastify = Fastify({
+  logger: true,
+});
 
 fastify.get('/api/posts', async (request, reply) => {
   const posts = require('../posts.json');
